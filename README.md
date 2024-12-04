@@ -13,3 +13,8 @@ please do not use in production environment to avoid losses.
 ### 功能列表 Function List
 - [ ] 批量重命名 Batch Rename
 - [ ] 批量文件提取 Batch File Extraction
+
+### 共享程序员（由我自己提供的远程开发服务） Shared Programmer (remote development service provided by myself)
+单价：60人民币每小时 unit price: RMB60 per hour
+
+https://item.taobao.com/item.htm?ft=t&id=859536808650
