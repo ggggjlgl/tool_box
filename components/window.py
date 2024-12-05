@@ -58,7 +58,7 @@ class MainWindow(QMainWindow):
         self.bind()
 
     def register_tools(self):
-        tool_batch_rename = Tool('批量重命名', self.style().standardIcon(QStyle.StandardPixmap.SP_FileLinkIcon),
+        tool_batch_rename = Tool('批量重命名', self.style().standardIcon(QStyle.StandardPixmap.SP_DriveFDIcon),
                                  '将符合条件的文件或目录名中指定部分替换为指定字符串', WidgetBatchRename)
 
         tools = [tool_batch_rename, ] * 20

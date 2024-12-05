@@ -184,7 +184,7 @@ class WidgetBatchRename(QWidget):
 
         self.run_layout.addItem(self.horizontalSpacer_8)
 
-        self.btn_reset = QPushButton(self.style().standardIcon(QStyle.StandardPixmap.SP_RestoreDefaultsButton), '重置',
+        self.btn_reset = QPushButton(self.style().standardIcon(QStyle.StandardPixmap.SP_DialogResetButton), '重置',
                                      self)
 
         self.btn_reset.setMinimumSize(QSize(100, 30))
@@ -205,11 +205,11 @@ class WidgetBatchRename(QWidget):
 
         self.run_layout.addItem(self.horizontalSpacer_10)
 
-        self.run_layout.setStretch(0, 2)
+        self.run_layout.setStretch(0, 1)
         self.run_layout.setStretch(1, 1)
         self.run_layout.setStretch(2, 2)
         self.run_layout.setStretch(3, 1)
-        self.run_layout.setStretch(4, 2)
+        self.run_layout.setStretch(4, 1)
 
         self.main_layout.addLayout(self.run_layout)
         self.bind()
