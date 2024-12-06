@@ -1,4 +1,3 @@
-import os
 import platform
 
 
@@ -7,7 +6,7 @@ PLATFORM = platform.system()
 CONFIGS = {
     'Windows': {'cp_order': 'copy', },
     'Darwin': {'cp_order': 'cp', },
-    'Linux': dict()
+    'Linux': {'cp_order': 'cp', },
 }
 
 

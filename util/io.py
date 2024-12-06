@@ -41,3 +41,12 @@ def get_new_target_path(origin_path: str, want_target_path: str, exist_func=os.p
         return os.path.normpath(font + ps + back)
     else:
         return want_target_path
+
+
+def get_target_path_with_dn(origin_path: str, target_dir: str):
+    tmp = origin_path.replace('\\', '-').replace('/', '-')
+    ps = f'-from-{tmp}'
+    base_name = os.path.basename(origin_path)
+    font, back = os.path.splitext(base_name)
+    new_base_name = font + ps + back
+    return os.path.normpath(os.path.join(target_dir, new_base_name))

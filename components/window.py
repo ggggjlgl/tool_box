@@ -2,6 +2,7 @@ from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QT
 from PySide6.QtCore import QRect
 
 from components.common import Tool, ToolButton, GridLayout
+from tools.tool_batch_extract import WidgetBatchExtract
 from tools.tool_batch_rename import WidgetBatchRename
 
 
@@ -58,15 +59,21 @@ class MainWindow(QMainWindow):
         self.bind()
 
     def register_tools(self):
-        tool_batch_rename = Tool('批量重命名', self.style().standardIcon(QStyle.StandardPixmap.SP_DriveFDIcon),
-                                 '将符合条件的文件或目录名中指定部分替换为指定字符串', WidgetBatchRename)
+        btn_batch_rename = ToolButton('批量重命名', self.style().standardIcon(QStyle.StandardPixmap.SP_DriveFDIcon),
+                                      '将符合条件的文件或目录名中指定部分替换为指定字符串', self)
+        btn_batch_rename.clicked.connect(lambda: self.handle_click(WidgetBatchRename(), '批量重命名'))
+        self.grid_layout.add_widget(btn_batch_rename)
 
-        tools = [tool_batch_rename, ] * 20
+        btn_batch_extract = ToolButton('批量提取',
+                                       self.style().standardIcon(QStyle.StandardPixmap.SP_FileDialogContentsView),
+                                       '将符合条件的文件提取到指定目录', self)
+        btn_batch_extract.clicked.connect(lambda: self.handle_click(WidgetBatchExtract(), '批量提取'))
+        self.grid_layout.add_widget(btn_batch_extract)
 
-        for i in tools:
-            tool_btn = ToolButton(*i.get_properties())
-            tool_btn.clicked.connect(lambda: self.handle_click(i.widget, i.name))
-            self.grid_layout.add_widget(tool_btn)
+        for _ in range(20):
+            btn_placeholder = ToolButton('占位', self.style().standardIcon(QStyle.StandardPixmap.SP_VistaShield),
+                                         '占位', self)
+            self.grid_layout.add_widget(btn_placeholder)
 
     def handle_click(self, widget, name: str):
         self.tab.addTab(widget, name)

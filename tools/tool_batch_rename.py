@@ -1,7 +1,8 @@
 import os.path
+import sys
 
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QSpacerItem, QSizePolicy, \
-    QPushButton, QComboBox, QCheckBox, QStyle, QFileDialog, QMessageBox
+    QPushButton, QComboBox, QCheckBox, QStyle, QFileDialog, QMessageBox, QApplication
 from PySide6.QtCore import QSize
 
 from util.io import get_files_by_dir, get_dirs_by_dir, get_new_target_path
@@ -23,14 +24,13 @@ class WidgetBatchRename(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.origin = None
-        self.mode = list(run_type_handler.keys())[0]
         self.old = ''
         self.new = ''
-        self.recursion = True
-        self.modify_dir = False
-        self.main_layout = QVBoxLayout(self)
+        self.success_file = 0
+        self.success_dir = 0
         self.errs = list()
 
+        self.main_layout = QVBoxLayout(self)
         self.main_layout.setContentsMargins(10, 10, 10, 20)
         self.origin_layout = QHBoxLayout()
         self.origin_layout.setSpacing(0)
@@ -51,7 +51,7 @@ class WidgetBatchRename(QWidget):
 
         self.origin_layout.addItem(self.horizontalSpacer)
 
-        self.btn_pick = QPushButton(self.style().standardIcon(QStyle.StandardPixmap.SP_DirOpenIcon), '选择目录：', self)
+        self.btn_pick = QPushButton(self.style().standardIcon(QStyle.StandardPixmap.SP_DirOpenIcon), '选择目录', self)
 
         self.btn_pick.setMinimumSize(QSize(100, 25))
 
@@ -147,36 +147,36 @@ class WidgetBatchRename(QWidget):
 
         self.main_layout.addLayout(self.new_layout)
 
-        self.include_layout = QHBoxLayout()
+        self.misc_layout = QHBoxLayout()
 
         self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.include_layout.addItem(self.horizontalSpacer_6)
+        self.misc_layout.addItem(self.horizontalSpacer_6)
 
-        self.cb_child_dir_file = QCheckBox('递归应用到子目录文件', self)
-        self.cb_child_dir_file.setChecked(True)
+        self.cb_recursion = QCheckBox('递归应用到子目录', self)
+        self.cb_recursion.setChecked(True)
 
-        self.include_layout.addWidget(self.cb_child_dir_file)
+        self.misc_layout.addWidget(self.cb_recursion)
 
         self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.include_layout.addItem(self.horizontalSpacer_5)
+        self.misc_layout.addItem(self.horizontalSpacer_5)
 
         self.cb_dir_name = QCheckBox('应用到目录名', self)
 
-        self.include_layout.addWidget(self.cb_dir_name)
+        self.misc_layout.addWidget(self.cb_dir_name)
 
         self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.include_layout.addItem(self.horizontalSpacer_7)
+        self.misc_layout.addItem(self.horizontalSpacer_7)
 
-        self.include_layout.setStretch(0, 1)
-        self.include_layout.setStretch(1, 1)
-        self.include_layout.setStretch(2, 1)
-        self.include_layout.setStretch(3, 1)
-        self.include_layout.setStretch(4, 1)
+        self.misc_layout.setStretch(0, 1)
+        self.misc_layout.setStretch(1, 1)
+        self.misc_layout.setStretch(2, 1)
+        self.misc_layout.setStretch(3, 1)
+        self.misc_layout.setStretch(4, 1)
 
-        self.main_layout.addLayout(self.include_layout)
+        self.main_layout.addLayout(self.misc_layout)
 
         self.run_layout = QHBoxLayout()
 
@@ -259,30 +259,32 @@ class WidgetBatchRename(QWidget):
                 self.modify(to_modify)
                 if self.errs:
                     e = '\n'.join(self.errs)
-                    QMessageBox.warning(self, '异常', f'😢执行已经结束，但存在异常：{e}', QMessageBox.StandardButton.Ok,
-                                        QMessageBox.StandardButton.Ok)
+                    QMessageBox.information(self, '异常', f'😢执行已经结束，{self.success_file}个文件名&{self.success_dir}个目录名已修改，但存在异常：{e}')
                 else:
-                    QMessageBox.information(self, '成功', '😊执行成功结束')
+                    QMessageBox.information(self, '成功', f'😊执行成功结束，{self.success_file}个文件名&{self.success_dir}个目录名已修改。')
 
     def modify(self, to_modify: tuple):
         self.errs.clear()
         files, dirs = to_modify
-        self.modify_paths(files)
-        self.modify_paths(dirs)
+        self.success_file = len(files)
+        self.success_dir = len(dirs)
+        self.modify_paths(files, self.success_file, os.path.isfile)
+        self.modify_paths(dirs, self.success_dir, os.path.isdir)
 
-    def modify_paths(self, paths):
+    def modify_paths(self, paths, count, exist_func):
         handler = getattr(self, run_type_handler[self.cbb_mode.currentText()])
         for p in paths:
             want_target_path = get_new_target_path(p, os.path.normpath(os.path.join(os.path.dirname(p), handler(p))),
-                                                   exist_func=os.path.isfile)
+                                                   exist_func=exist_func)
             try:
                 os.rename(p, want_target_path)
             except Exception as e:
+                count -= 1
                 self.errs.append(
-                    f'原路径:{p}，目标路径:{want_target_path}，操作方式：{self.cbb_mode.currentText()}，错误信息:{e}')
+                    f'原路径:{p}，目标路径:{want_target_path}，操作方式：{self.cbb_mode.currentText()}，错误信息:{e}，您可以在关闭对应路径的文件资源管理器窗口后再试。')
 
     def collect(self):
-        if self.cb_child_dir_file.isChecked():
+        if self.cb_recursion.isChecked():
             files = get_files_by_dir(self.origin)
             dirs = get_dirs_by_dir(self.origin) if self.cb_dir_name.isChecked() else list()
         else:
@@ -317,7 +319,7 @@ class WidgetBatchRename(QWidget):
         self.cbb_mode.setCurrentIndex(0)
         self.le_old.clear()
         self.le_new.clear()
-        self.cb_child_dir_file.setChecked(False)
+        self.cb_recursion.setChecked(False)
         self.cb_dir_name.setChecked(False)
 
     def switch_mode(self, text):
@@ -336,3 +338,10 @@ class WidgetBatchRename(QWidget):
         if dir_path:
             self.origin = os.path.normpath(dir_path)
             self.le_origin.setText(self.origin)
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    w = WidgetBatchRename()
+    w.show()
+    sys.exit(app.exec())

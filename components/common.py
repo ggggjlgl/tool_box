@@ -1,6 +1,8 @@
-from PySide6.QtWidgets import QGridLayout, QWidget
-from PySide6.QtWidgets import QToolButton, QSizePolicy
 from PySide6.QtCore import QSize, Qt
+from PySide6.QtWidgets import QComboBox, QCheckBox, QWidget, QLineEdit, QListWidget, QListWidgetItem, QGridLayout, \
+    QToolButton, QSizePolicy
+
+from components.interface import WidgetWithComboCheckBox
 
 
 class Tool:
@@ -39,3 +41,50 @@ class ToolButton(QToolButton):
         self.setMinimumSize(QSize(200, 200))
         self.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
 
+
+class ComboCheckBox(QComboBox):
+    def __init__(self, items: list, parent: WidgetWithComboCheckBox):
+        super().__init__(parent)
+        self.p = parent
+        self.items = items
+        self.text = QLineEdit()
+        self.text.setReadOnly(True)
+        self.setLineEdit(self.text)
+        self.cb_s = list()
+        self.li = QListWidget()
+        self.setModel(self.li.model())
+        self.setView(self.li)
+        self.rebuild_items()
+
+    def showPopup(self):
+        if extensions := self.p.get_cbb_items():
+            self.refresh_items(extensions)
+        super().showPopup()
+
+    def clear(self):
+        self.items.clear()
+        self.rebuild_items()
+
+    def refresh_items(self, items: list):
+        self.items = items
+        self.rebuild_items()
+
+    def rebuild_items(self):
+        self.li.clear()
+        self.cb_s.clear()
+        for text in self.items:
+            cb = QCheckBox(text)
+            cb.setChecked(True)
+            cb.stateChanged.connect(self.refresh_text)
+            self.cb_s.append(cb)
+            item = QListWidgetItem(self.li)
+            self.li.setItemWidget(item, cb)
+
+        self.refresh_text()
+
+    @property
+    def selected(self):
+        return [cb.text() for cb in self.cb_s if cb.isChecked()]
+
+    def refresh_text(self):
+        self.text.setText(', '.join(self.selected))
