@@ -222,9 +222,9 @@ class WidgetBatchExtract(WidgetWithComboCheckBox):
                 self.modify(to_modify)
                 if self.errs:
                     e = '\n'.join(self.errs)
-                    QMessageBox.information(self, '异常', f'😢执行已经结束，{self.success}个文件名已修改，但存在异常：{e}')
+                    QMessageBox.information(self, '异常', f'😢执行已经结束，{self.success}个路径已修改，但存在异常：{e}')
                 else:
-                    QMessageBox.information(self, '成功', f'😊执行成功结束，{self.success}个文件名已修改。')
+                    QMessageBox.information(self, '成功', f'😊执行成功结束，{self.success}个路径已修改。')
 
     def modify(self, to_modify: list):
         self.errs.clear()
@@ -258,9 +258,12 @@ class WidgetBatchExtract(WidgetWithComboCheckBox):
         fit_type_features = False
         if self.name_features in file_name:
             fit_name_features = True
-        for t in self.type_features:
-            if file_name.endswith(t):
-                fit_type_features = True
+        if self.type_features:
+            for t in self.type_features:
+                if file_name.endswith(t):
+                    fit_type_features = True
+        else:
+            fit_type_features = True
         return fit_name_features and fit_type_features
 
     def get_cbb_items(self):
@@ -286,12 +289,11 @@ class WidgetBatchExtract(WidgetWithComboCheckBox):
             return False
         if s := self.le_name_features.text().strip():
             self.name_features = s
-            self.type_features = self.cbb_type_features.selected
-        elif self.cbb_type_features.selected:
-            self.name_features = ''
-            self.type_features = self.cbb_type_features.selected
         else:
-            return False
+            self.name_features = ''
+        self.type_features = list()
+        return True
+
 
     def validate(self) -> bool:
         if (tmp_origin := self.le_origin.text().strip()) and os.path.isdir(origin := os.path.normpath(tmp_origin)):
