@@ -2,9 +2,9 @@ import os.path
 
 from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QSpacerItem, QSizePolicy, \
     QPushButton, QCheckBox, QStyle, QFileDialog, QMessageBox
-from PySide6.QtCore import QSize
+from PySide6.QtCore import QSize, Qt
 
-from components.common import ComboCheckBox
+from components.common import ComboCheckBox, H_SPACER
 from components.interface import WidgetWithComboCheckBox
 from util.common import global_config
 from util.io import get_files_by_dir, get_new_target_path, get_target_path_with_dn
@@ -21,11 +21,11 @@ class WidgetBatchExtract(WidgetWithComboCheckBox):
         self.errs = list()
 
         self.main_layout = QVBoxLayout(self)
-        self.main_layout.setContentsMargins(10, 10, 10, 50)
+        self.main_layout.setContentsMargins(10, 10, 10, 20)
 
         self.origin_layout = QHBoxLayout()
-        self.horizontal_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-        self.origin_layout.addItem(self.horizontal_spacer)
+        self.origin_layout.setSpacing(0)
+        self.origin_layout.addItem(H_SPACER)
         self.lb_origin = QLabel('执行目录：', self)
         size_policy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
         size_policy.setHorizontalStretch(0)
@@ -40,8 +40,7 @@ class WidgetBatchExtract(WidgetWithComboCheckBox):
                                            self)
         self.btn_pick_origin.setMinimumSize(QSize(0, 30))
         self.origin_layout.addWidget(self.btn_pick_origin)
-        self.horizontal_spacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-        self.origin_layout.addItem(self.horizontal_spacer_2)
+        self.origin_layout.addItem(H_SPACER)
         self.origin_layout.setStretch(0, 1)
         self.origin_layout.setStretch(1, 1)
         self.origin_layout.setStretch(2, 4)
@@ -50,10 +49,9 @@ class WidgetBatchExtract(WidgetWithComboCheckBox):
         self.main_layout.addLayout(self.origin_layout)
 
         self.target_layout = QHBoxLayout()
-        self.horizontal_spacer1 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-        self.target_layout.addItem(self.horizontal_spacer1)
+        self.target_layout.setSpacing(0)
+        self.target_layout.addItem(H_SPACER)
         self.lb_target = QLabel('目标目录：', self)
-        size_policy.setHeightForWidth(self.lb_target.sizePolicy().hasHeightForWidth())
         self.lb_target.setSizePolicy(size_policy)
         self.target_layout.addWidget(self.lb_target)
         self.le_target = QLineEdit(self)
@@ -63,8 +61,7 @@ class WidgetBatchExtract(WidgetWithComboCheckBox):
                                            self)
         self.btn_pick_target.setMinimumSize(QSize(0, 30))
         self.target_layout.addWidget(self.btn_pick_target)
-        self.horizontal_spacer2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-        self.target_layout.addItem(self.horizontal_spacer2)
+        self.target_layout.addItem(H_SPACER)
         self.target_layout.setStretch(0, 1)
         self.target_layout.setStretch(1, 1)
         self.target_layout.setStretch(2, 4)
@@ -73,17 +70,15 @@ class WidgetBatchExtract(WidgetWithComboCheckBox):
         self.main_layout.addLayout(self.target_layout)
 
         self.features_layout = QHBoxLayout()
-        self.horizontal_spacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-        self.features_layout.addItem(self.horizontal_spacer_3)
+        self.features_layout.setSpacing(0)
+        self.features_layout.addItem(H_SPACER)
         self.lb_name_features = QLabel('名称特征：', self)
-        size_policy.setHeightForWidth(self.lb_name_features.sizePolicy().hasHeightForWidth())
         self.lb_name_features.setSizePolicy(size_policy)
         self.features_layout.addWidget(self.lb_name_features)
         self.le_name_features = QLineEdit(self)
         self.le_name_features.setMinimumSize(QSize(0, 25))
         self.features_layout.addWidget(self.le_name_features)
-        self.horizontal_spacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-        self.features_layout.addItem(self.horizontal_spacer_4)
+        self.features_layout.addItem(H_SPACER)
         self.features_layout.setStretch(0, 1)
         self.features_layout.setStretch(1, 1)
         self.features_layout.setStretch(2, 5)
@@ -91,12 +86,11 @@ class WidgetBatchExtract(WidgetWithComboCheckBox):
         self.main_layout.addLayout(self.features_layout)
 
         self.type_layout = QHBoxLayout()
-        self.horizontal_spacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.type_layout.setSpacing(0)
 
-        self.type_layout.addItem(self.horizontal_spacer_5)
+        self.type_layout.addItem(H_SPACER)
 
         self.lb_type_features = QLabel('类型特征：', self)
-        size_policy.setHeightForWidth(self.lb_type_features.sizePolicy().hasHeightForWidth())
         self.lb_type_features.setSizePolicy(size_policy)
 
         self.type_layout.addWidget(self.lb_type_features)
@@ -106,9 +100,7 @@ class WidgetBatchExtract(WidgetWithComboCheckBox):
 
         self.type_layout.addWidget(self.cbb_type_features)
 
-        self.horizontal_spacer_6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.type_layout.addItem(self.horizontal_spacer_6)
+        self.type_layout.addItem(H_SPACER)
 
         self.type_layout.setStretch(0, 1)
         self.type_layout.setStretch(1, 1)
@@ -118,39 +110,29 @@ class WidgetBatchExtract(WidgetWithComboCheckBox):
         self.main_layout.addLayout(self.type_layout)
 
         self.misc_layout = QHBoxLayout()
-        self.horizontal_spacer_10 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.misc_layout.setSpacing(0)
 
-        self.misc_layout.addItem(self.horizontal_spacer_10)
+        self.misc_layout.addItem(H_SPACER)
 
         self.cb_recursion = QCheckBox('递归应用到子目录', self)
-        size_policy1 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-        size_policy1.setHorizontalStretch(0)
-        size_policy1.setVerticalStretch(0)
-        size_policy1.setHeightForWidth(self.cb_recursion.sizePolicy().hasHeightForWidth())
-        self.cb_recursion.setSizePolicy(size_policy1)
+        self.cb_recursion.setSizePolicy(size_policy)
         self.cb_recursion.setChecked(True)
 
-        self.misc_layout.addWidget(self.cb_recursion)
+        self.misc_layout.addWidget(self.cb_recursion, 0, Qt.AlignmentFlag.AlignHCenter)
 
-        self.horizontal_spacer_12 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.misc_layout.addItem(self.horizontal_spacer_12)
+        self.misc_layout.addItem(H_SPACER)
 
         self.cb_del_origin = QCheckBox('删除源文件', self)
 
-        self.misc_layout.addWidget(self.cb_del_origin)
+        self.misc_layout.addWidget(self.cb_del_origin, 0, Qt.AlignmentFlag.AlignHCenter)
 
-        self.horizontal_spacer_ = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.misc_layout.addItem(self.horizontal_spacer_)
+        self.misc_layout.addItem(H_SPACER)
 
         self.cb_with_dn = QCheckBox('附加原目录名', self)
 
-        self.misc_layout.addWidget(self.cb_with_dn)
+        self.misc_layout.addWidget(self.cb_with_dn, 0, Qt.AlignmentFlag.AlignHCenter)
 
-        self.horizontal_spacer_11 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.misc_layout.addItem(self.horizontal_spacer_11)
+        self.misc_layout.addItem(H_SPACER)
 
         self.misc_layout.setStretch(0, 1)
         self.misc_layout.setStretch(1, 1)
@@ -158,13 +140,14 @@ class WidgetBatchExtract(WidgetWithComboCheckBox):
         self.misc_layout.setStretch(3, 1)
         self.misc_layout.setStretch(4, 1)
         self.misc_layout.setStretch(5, 1)
+        self.misc_layout.setStretch(6, 1)
 
         self.main_layout.addLayout(self.misc_layout)
 
         self.run_layout = QHBoxLayout()
-        self.horizontal_spacer_7 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.run_layout.setSpacing(0)
 
-        self.run_layout.addItem(self.horizontal_spacer_7)
+        self.run_layout.addItem(H_SPACER)
 
         self.btn_reset = QPushButton(self.style().standardIcon(QStyle.StandardPixmap.SP_DialogResetButton), '重置',
                                      self)
@@ -176,9 +159,7 @@ class WidgetBatchExtract(WidgetWithComboCheckBox):
 
         self.run_layout.addItem(self.vertical_spacer)
 
-        self.horizontal_spacer_9 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.run_layout.addItem(self.horizontal_spacer_9)
+        self.run_layout.addItem(H_SPACER)
 
         self.vertical_spacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
@@ -189,9 +170,7 @@ class WidgetBatchExtract(WidgetWithComboCheckBox):
 
         self.run_layout.addWidget(self.btn_run)
 
-        self.horizontal_spacer_8 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.run_layout.addItem(self.horizontal_spacer_8)
+        self.run_layout.addItem(H_SPACER)
 
         self.run_layout.setStretch(0, 1)
         self.run_layout.setStretch(1, 1)

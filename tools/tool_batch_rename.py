@@ -3,8 +3,9 @@ import sys
 
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QSpacerItem, QSizePolicy, \
     QPushButton, QComboBox, QCheckBox, QStyle, QFileDialog, QMessageBox, QApplication
-from PySide6.QtCore import QSize
+from PySide6.QtCore import QSize, Qt
 
+from components.common import H_SPACER
 from util.io import get_files_by_dir, get_dirs_by_dir, get_new_target_path
 
 run_type_handler = {'批量去除指定字符': 'remove_str', '批量去除指定前缀': 'remove_pre_by_str',
@@ -33,11 +34,16 @@ class WidgetBatchRename(QWidget):
         self.main_layout = QVBoxLayout(self)
         self.main_layout.setContentsMargins(10, 10, 10, 20)
         self.origin_layout = QHBoxLayout()
-        self.origin_layout.setSpacing(0)
 
         self.origin_layout.addItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
 
         self.lb_origin = QLabel('执行目录：', self)
+
+        size_policy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
+        size_policy.setHorizontalStretch(0)
+        size_policy.setVerticalStretch(0)
+        size_policy.setHeightForWidth(self.lb_origin.sizePolicy().hasHeightForWidth())
+        self.lb_origin.setSizePolicy(size_policy)
 
         self.origin_layout.addWidget(self.lb_origin)
 
@@ -47,26 +53,19 @@ class WidgetBatchRename(QWidget):
 
         self.origin_layout.addWidget(self.le_origin)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.origin_layout.addItem(self.horizontalSpacer)
-
         self.btn_pick = QPushButton(self.style().standardIcon(QStyle.StandardPixmap.SP_DirOpenIcon), '选择目录', self)
 
         self.btn_pick.setMinimumSize(QSize(100, 25))
 
         self.origin_layout.addWidget(self.btn_pick)
 
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.origin_layout.addItem(self.horizontalSpacer_2)
+        self.origin_layout.addItem(H_SPACER)
 
         self.origin_layout.setStretch(0, 1)
         self.origin_layout.setStretch(1, 1)
-        self.origin_layout.setStretch(2, 2)
+        self.origin_layout.setStretch(2, 4)
         self.origin_layout.setStretch(3, 1)
         self.origin_layout.setStretch(4, 1)
-        self.origin_layout.setStretch(5, 1)
 
         self.main_layout.addLayout(self.origin_layout)
 
@@ -76,6 +75,7 @@ class WidgetBatchRename(QWidget):
         self.mode_layout.addItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
 
         self.lb_mode = QLabel('执行模式：', self)
+        self.lb_mode.setSizePolicy(size_policy)
 
         self.mode_layout.addWidget(self.lb_mode)
 
@@ -86,13 +86,11 @@ class WidgetBatchRename(QWidget):
 
         self.mode_layout.addWidget(self.cbb_mode)
 
-        self.horizontalSpacer_11 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.mode_layout.addItem(self.horizontalSpacer_11)
+        self.mode_layout.addItem(H_SPACER)
 
         self.mode_layout.setStretch(0, 1)
         self.mode_layout.setStretch(1, 1)
-        self.mode_layout.setStretch(2, 4)
+        self.mode_layout.setStretch(2, 5)
         self.mode_layout.setStretch(3, 1)
 
         self.main_layout.addLayout(self.mode_layout)
@@ -102,6 +100,7 @@ class WidgetBatchRename(QWidget):
         self.old_layout.addItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
 
         self.lb_old = QLabel('原字符串：', self)
+        self.lb_old.setSizePolicy(size_policy)
 
         self.old_layout.addWidget(self.lb_old)
 
@@ -111,13 +110,11 @@ class WidgetBatchRename(QWidget):
 
         self.old_layout.addWidget(self.le_old)
 
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.old_layout.addItem(self.horizontalSpacer_3)
+        self.old_layout.addItem(H_SPACER)
 
         self.old_layout.setStretch(0, 1)
         self.old_layout.setStretch(1, 1)
-        self.old_layout.setStretch(2, 4)
+        self.old_layout.setStretch(2, 5)
         self.old_layout.setStretch(3, 1)
 
         self.main_layout.addLayout(self.old_layout)
@@ -127,6 +124,7 @@ class WidgetBatchRename(QWidget):
         self.new_layout.addItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
 
         self.lb_new = QLabel('新字符串：', self)
+        self.lb_new.setSizePolicy(size_policy)
 
         self.new_layout.addWidget(self.lb_new)
 
@@ -136,39 +134,32 @@ class WidgetBatchRename(QWidget):
 
         self.new_layout.addWidget(self.le_new)
 
-        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.new_layout.addItem(self.horizontalSpacer_4)
+        self.new_layout.addItem(H_SPACER)
 
         self.new_layout.setStretch(0, 1)
         self.new_layout.setStretch(1, 1)
-        self.new_layout.setStretch(2, 4)
+        self.new_layout.setStretch(2, 5)
         self.new_layout.setStretch(3, 1)
 
         self.main_layout.addLayout(self.new_layout)
 
         self.misc_layout = QHBoxLayout()
 
-        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.misc_layout.addItem(self.horizontalSpacer_6)
+        self.misc_layout.addItem(H_SPACER)
 
         self.cb_recursion = QCheckBox('递归应用到子目录', self)
+        self.cb_recursion.setSizePolicy(size_policy)
         self.cb_recursion.setChecked(True)
 
-        self.misc_layout.addWidget(self.cb_recursion)
+        self.misc_layout.addWidget(self.cb_recursion, 0, Qt.AlignmentFlag.AlignHCenter)
 
-        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.misc_layout.addItem(self.horizontalSpacer_5)
+        self.misc_layout.addItem(H_SPACER)
 
         self.cb_dir_name = QCheckBox('应用到目录名', self)
 
-        self.misc_layout.addWidget(self.cb_dir_name)
+        self.misc_layout.addWidget(self.cb_dir_name, 0, Qt.AlignmentFlag.AlignHCenter)
 
-        self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.misc_layout.addItem(self.horizontalSpacer_7)
+        self.misc_layout.addItem(H_SPACER)
 
         self.misc_layout.setStretch(0, 1)
         self.misc_layout.setStretch(1, 1)
@@ -180,38 +171,47 @@ class WidgetBatchRename(QWidget):
 
         self.run_layout = QHBoxLayout()
 
-        self.horizontalSpacer_8 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.run_layout.addItem(self.horizontalSpacer_8)
+        self.run_layout.addItem(H_SPACER)
 
         self.btn_reset = QPushButton(self.style().standardIcon(QStyle.StandardPixmap.SP_DialogResetButton), '重置',
                                      self)
 
-        self.btn_reset.setMinimumSize(QSize(100, 30))
+        self.btn_reset.setMinimumSize(QSize(200, 45))
 
         self.run_layout.addWidget(self.btn_reset)
 
-        self.horizontalSpacer_9 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.run_layout.addItem(self.horizontalSpacer_9)
+        self.run_layout.addItem(self.vertical_spacer)
+
+        self.run_layout.addItem(H_SPACER)
+
+        self.vertical_spacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.run_layout.addItem(self.vertical_spacer_2)
 
         self.btn_run = QPushButton(self.style().standardIcon(QStyle.StandardPixmap.SP_MediaPlay), '执行', self)
 
-        self.btn_run.setMinimumSize(QSize(100, 30))
+        self.btn_run.setMinimumSize(QSize(200, 45))
 
         self.run_layout.addWidget(self.btn_run)
 
-        self.horizontalSpacer_10 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.run_layout.addItem(self.horizontalSpacer_10)
+        self.run_layout.addItem(H_SPACER)
 
         self.run_layout.setStretch(0, 1)
         self.run_layout.setStretch(1, 1)
-        self.run_layout.setStretch(2, 2)
-        self.run_layout.setStretch(3, 1)
-        self.run_layout.setStretch(4, 1)
+        self.run_layout.setStretch(3, 2)
+        self.run_layout.setStretch(5, 1)
+        self.run_layout.setStretch(6, 1)
 
         self.main_layout.addLayout(self.run_layout)
+
+        self.main_layout.setStretch(0, 1)
+        self.main_layout.setStretch(1, 1)
+        self.main_layout.setStretch(2, 1)
+        self.main_layout.setStretch(3, 1)
+        self.main_layout.setStretch(4, 1)
+        self.main_layout.setStretch(5, 1)
         self.bind()
 
     def remove_str(self, origin_path):

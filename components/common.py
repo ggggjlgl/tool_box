@@ -1,8 +1,10 @@
 from PySide6.QtCore import QSize, Qt
 from PySide6.QtWidgets import QComboBox, QCheckBox, QWidget, QLineEdit, QListWidget, QListWidgetItem, QGridLayout, \
-    QToolButton, QSizePolicy
+    QToolButton, QSizePolicy, QSpacerItem
 
 from components.interface import WidgetWithComboCheckBox
+
+H_SPACER = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
 
 class Tool:
