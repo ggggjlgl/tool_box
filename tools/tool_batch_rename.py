@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEd
     QPushButton, QComboBox, QCheckBox, QStyle, QFileDialog, QMessageBox, QApplication
 from PySide6.QtCore import QSize, Qt
 
-from components.common import H_SPACER
+from components.common import H_SPACER, MIN_H_30
 from util.io import get_files_by_dir, get_dirs_by_dir, get_new_target_path
 
 run_type_handler = {'批量去除指定字符': 'remove_str', '批量去除指定前缀': 'remove_pre_by_str',
@@ -49,13 +49,13 @@ class WidgetBatchRename(QWidget):
 
         self.le_origin = QLineEdit(self)
 
-        self.le_origin.setMinimumSize(QSize(0, 25))
+        self.le_origin.setMinimumSize(MIN_H_30)
 
         self.origin_layout.addWidget(self.le_origin)
 
         self.btn_pick = QPushButton(self.style().standardIcon(QStyle.StandardPixmap.SP_DirOpenIcon), '选择目录', self)
 
-        self.btn_pick.setMinimumSize(QSize(100, 25))
+        self.btn_pick.setMinimumSize(QSize(0, 30))
 
         self.origin_layout.addWidget(self.btn_pick)
 
@@ -82,7 +82,7 @@ class WidgetBatchRename(QWidget):
         self.cbb_mode = QComboBox(self)
         self.cbb_mode.addItems(list(run_type_handler.keys()))
 
-        self.cbb_mode.setMinimumSize(QSize(0, 25))
+        self.cbb_mode.setMinimumSize(MIN_H_30)
 
         self.mode_layout.addWidget(self.cbb_mode)
 
@@ -106,7 +106,7 @@ class WidgetBatchRename(QWidget):
 
         self.le_old = QLineEdit(self)
 
-        self.le_old.setMinimumSize(QSize(0, 25))
+        self.le_old.setMinimumSize(MIN_H_30)
 
         self.old_layout.addWidget(self.le_old)
 
@@ -130,7 +130,7 @@ class WidgetBatchRename(QWidget):
 
         self.le_new = QLineEdit(self)
 
-        self.le_new.setMinimumSize(QSize(0, 25))
+        self.le_new.setMinimumSize(MIN_H_30)
 
         self.new_layout.addWidget(self.le_new)
 

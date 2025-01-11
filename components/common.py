@@ -5,6 +5,7 @@ from PySide6.QtWidgets import QComboBox, QCheckBox, QWidget, QLineEdit, QListWid
 from components.interface import WidgetWithComboCheckBox
 
 H_SPACER = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+MIN_H_30 = QSize(0, 30)
 
 
 class Tool:

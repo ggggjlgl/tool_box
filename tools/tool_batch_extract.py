@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QSpac
     QPushButton, QCheckBox, QStyle, QFileDialog, QMessageBox
 from PySide6.QtCore import QSize, Qt
 
-from components.common import ComboCheckBox, H_SPACER
+from components.common import ComboCheckBox, H_SPACER, MIN_H_30
 from components.interface import WidgetWithComboCheckBox
 from util.common import global_config
 from util.io import get_files_by_dir, get_new_target_path, get_target_path_with_dn
@@ -34,7 +34,7 @@ class WidgetBatchExtract(WidgetWithComboCheckBox):
         self.lb_origin.setSizePolicy(size_policy)
         self.origin_layout.addWidget(self.lb_origin)
         self.le_origin = QLineEdit(self)
-        self.le_origin.setMinimumSize(QSize(0, 25))
+        self.le_origin.setMinimumSize(MIN_H_30)
         self.origin_layout.addWidget(self.le_origin)
         self.btn_pick_origin = QPushButton(self.style().standardIcon(QStyle.StandardPixmap.SP_DirOpenIcon), '选择目录',
                                            self)
@@ -55,7 +55,7 @@ class WidgetBatchExtract(WidgetWithComboCheckBox):
         self.lb_target.setSizePolicy(size_policy)
         self.target_layout.addWidget(self.lb_target)
         self.le_target = QLineEdit(self)
-        self.le_target.setMinimumSize(QSize(0, 25))
+        self.le_target.setMinimumSize(MIN_H_30)
         self.target_layout.addWidget(self.le_target)
         self.btn_pick_target = QPushButton(self.style().standardIcon(QStyle.StandardPixmap.SP_DirOpenIcon), '选择目录',
                                            self)
@@ -76,7 +76,7 @@ class WidgetBatchExtract(WidgetWithComboCheckBox):
         self.lb_name_features.setSizePolicy(size_policy)
         self.features_layout.addWidget(self.lb_name_features)
         self.le_name_features = QLineEdit(self)
-        self.le_name_features.setMinimumSize(QSize(0, 25))
+        self.le_name_features.setMinimumSize(MIN_H_30)
         self.features_layout.addWidget(self.le_name_features)
         self.features_layout.addItem(H_SPACER)
         self.features_layout.setStretch(0, 1)
@@ -96,7 +96,7 @@ class WidgetBatchExtract(WidgetWithComboCheckBox):
         self.type_layout.addWidget(self.lb_type_features)
 
         self.cbb_type_features = ComboCheckBox(list(), self)
-        self.cbb_type_features.setMinimumSize(QSize(0, 25))
+        self.cbb_type_features.setMinimumSize(MIN_H_30)
 
         self.type_layout.addWidget(self.cbb_type_features)
 
